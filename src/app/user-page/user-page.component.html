@@ -1,0 +1,122 @@
+<html>
+    <header class="user-header">
+        <img class="logo" src="assets/image/Screenshot (316).png" alt="logo" height="60px">
+        <span class="logo-text">Water Billing System</span>
+        <nav class="nav">
+            <ul class="nav_links">
+                <li><a routerLink="/transaction" routerLinkActive="linkActive">Transaction</a></li>
+                <li><a routerLink="/consumer" routerLinkActive="linkActive">Concessionaire</a></li>
+                <li><a routerLink="/user" routerLinkActive="linkActive">User Accounts</a></li>
+            </ul>
+        </nav>
+        <a routerLink="/login" routerLinkActive="linkActive">
+            <span class="cta"></span>
+            <button class="signout"><span>Sign Out </span></button>
+        </a>
+    </header>
+    <body class="container">
+        <div class="index-wrapper">
+            <div class="input-wrapper">
+                <form class="userForm" (submit)="addUser()" #userForm="ngForm">
+                    <div class="form-container">
+                        <label class="label" for="userName">Name</label>
+                        <div class="inp">
+                            <input class="input" type="text" placeholder="ex: Juan Dela Cruz" name="user_Name" required #uName="ngModel" [(ngModel)]="user_Name" [class.invalid]="uName.invalid && uName.touched" pattern="^[A-Za-z. ]{2,}$">
+                            <span class="text-danger" *ngIf="uName.errors?.pattern"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+                            <span class="text-danger" *ngIf="!uName.value || uName.pristine">*</span>
+                        </div>
+                        <div class="help-block" *ngIf="uName.errors?.pattern">not a valid format</div>
+    
+                        <label class="label" for="userUsername">Username</label>
+                        <span class="inp">
+                            <input class="input" type="text" placeholder="Username" name="user_Username" required #username="ngModel" [(ngModel)]="user_Username" [class.invalid]="username.invalid && username.touched" pattern="^[a-z\d\.]{5,}$">
+                            <span *ngIf="username.errors?.pattern" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+                            <span *ngIf="!username.value || username.pristine" class="text-danger">*</span>
+                        </span>
+                        <div class="help-block" *ngIf="username.errors?.pattern">not a valid format</div>
+    
+                        <label class="label" for="userPassword">Password</label>
+                        <span class="inp">
+                            <input class="input" type="password" placeholder="Password" name="user_Password" required #Password="ngModel" [(ngModel)]="user_Password" [class.invalid]="Password.invalid && Password.touched" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$">
+                            <span *ngIf="Password.errors?.pattern" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+                            <span class="text-danger" *ngIf="!Password.value || Password.pristine">*</span>
+                        </span>
+                        <div class="help-block" *ngIf="Password.errors?.pattern">Password should consist of UpperCase, LowerCase, Number/SpecialChar and min 8 Chars</div>
+                    </div>
+                    <div class="form-footer">
+                        <input type="submit" class="btn btn-new-acc" [disabled]="userForm.invalid" value="Save">
+                    </div>
+                </form>    
+            </div> 
+            <!-- END Input content -->
+    
+            <div class="index-container">
+                <input type="text" id="searchInput" onkeyup="myFunction()" placeholder="Search for a name..." title="Type a name">
+                <table id="myTable">
+                    <tr class="header">
+                        <th class="th-name">Name</th>
+                        <th class="th-username">Username</th>
+                        <th class="th-act">Action</th>
+                    </tr>
+                    <tr *ngFor="let user of users">
+                        <td class="td-name">{{user.name}}</td>
+                        <td class="td-username">{{user.username}}</td>
+                        <td class="td-act">
+                            <button class="btn-action" onclick="document.getElementById('id02').style.display='block'" (click)="getData(user._id)"><img src="assets/image/icons8-edit-30.png" alt="edit-icon" title="Update record"></button>
+                            <button class="btn-action" (click)="deleteUser(user._id)"><img src="assets/image/icons8-trash-30.png" alt="delete-icon" title="Delete record"></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
+
+<!-- MODAL -->
+<div id="id02" class="update-user-modal">
+    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+    <form class="modal-content" #updateUserForm="ngForm">
+        <h1 class="modal-title">Update Form for User Account</h1>
+        <div class="form-modal-container">
+            <!-- message warning -->
+            <div class="help-block" *ngIf="e_userName.errors?.pattern">Name is not a valid format</div>
+            <div class="help-block" *ngIf="e_userUsername.errors?.pattern">Username is not a valid format</div>
+            <div class="help-block" *ngIf="e_userPassword.errors?.pattern">Password should consist of UpperCase, LowerCase, Number/SpecialChar and min 8 Chars</div>
+            <!-- end message warning -->
+            <!-- update inputs -->
+            <label class="modal-label" for="userName">Name</label>
+            <span class="inp">
+                <input id="modal-input" type="text" placeholder="ex: Juan Dela Cruz"  name="user_Name1" required #e_userName="ngModel" [(ngModel)]="user_Name1" [class.invalid]="e_userName.invalid && e_userName.touched" pattern="^[A-Za-z. ]{2,}$" value="{{ upUsers.name }}">
+                <span *ngIf="e_userName.value==''" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+            <label class="modal-label" for="userUsername">Username</label>
+            <span class="inp">
+                <input id="modal-input" type="text" placeholder="Username" name="user_Username1" required #e_userUsername="ngModel" [(ngModel)]="user_Username1" [class.invalid]="e_userUsername.invalid && e_userUsername.touched" pattern="^[a-z\d\.]{5,}$" value="{{ upUsers.username }}">
+                <span *ngIf="e_userUsername.value==''" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+            <label class="modal-label">Password</label>
+            <span class="inp">
+                <input id="modal-input" type="password" placeholder="Password" name="user_Password1" required #e_userPassword="ngModel" [(ngModel)]="user_Password1" [class.invalid]="e_userPassword.invalid && e_userPassword.touched" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" value="{{ upUsers.password }}">
+                <span *ngIf="e_userPassword.value==''" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="document.getElementById('id02').style.display='none'" class="btn-cancel">Cancel</button>
+            <input type="button" onclick="document.getElementById('id02').style.display='none'" class="btn-save-update" [disabled]="updateUserForm.invalid" value="Save Chages" (click) = "updateUser(upUsers._id)">
+        </div>
+    </form> 
+</div>
+<!-- end modal2 -->
+<!-- END MODALS -->
+<script>
+    var modal1 = document.getElementById('id01');
+    var modal2 = document.getElementById('id02');
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal || event.target == modal2 || event.target == modal3) {
+        modal.style.display = "none";
+        }
+    }
+</script>

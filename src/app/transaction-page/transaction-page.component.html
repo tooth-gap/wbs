@@ -1,0 +1,152 @@
+<html>
+    <header class="user-header">
+        <img class="logo" src="assets/image/Screenshot (316).png" alt="logo" height="60px">
+        <span class="logo-text">Water Billing System</span>
+        <nav class="nav">
+            <ul class="nav_links">
+                <li><a routerLink="/transaction" routerLinkActive="linkActive">Transaction</a></li>
+                <li><a routerLink="/consumer" routerLinkActive="linkActive">Concessionaire</a></li>
+                <li><a routerLink="/user" routerLinkActive="linkActive">User Accounts</a></li>
+            </ul>
+        </nav>
+        <a routerLink="/login" routerLinkActive="linkActive">
+            <span class="cta"></span>
+            <button class="signout"><span>Sign Out </span></button>
+        </a>
+    </header>
+    <body class="container">
+        <div class="index-wrapper">
+            <!-- <div class="input-wrapper">
+            </div>  -->
+            <!-- END Input content -->
+            <div class="index-container">
+                <input type="text" id="searchInput" onkeyup="myFunction()" placeholder="Search for a name..." title="Type a name">
+                <table id="myTable">
+                    <tr>
+                        <th class="th-name">TID</th>
+                        <th class="th-location">Current Record</th>
+                        <th class="th-phone">Revious Record</th>
+                        <th class="th-email">Unpaid Month/s</th>
+                        <th class="th-act">Action</th>
+                    </tr>
+                    <tr *ngFor="let tran of transactions">
+                        <td class="td-name" >{{ tran._id}}</td>
+                        <td class="td-cr">{{ tran.current_record }}</td>
+                        <td class="td-pr"> {{ tran.previous_record }}</td>
+                        <td class="td-um">{{ tran.unpaid_month }}</td>
+                        <td class="td-act">
+                            <button class="btn-action"  (click)="getTranView(tran.consumerId)" onclick="document.getElementById('id02').style.display='block'"><img src="assets/image/icons8-view-more-30.png" alt="new-icon"></button>
+                            <button class="btn-action" (click)="getTran(tran._id)" onclick="document.getElementById('id03').style.display='block'"><img src="assets/image/icons8-edit-30.png" alt="edit-icon"></button>
+                            <button class="btn-action" (click)="deleteTransaction(tran._id)"><img src="assets/image/icons8-trash-30.png" alt="delete-icon"></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
+
+<!-- MODAL -->
+<div id="id02" class="update-user-modal">
+    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+    <div class="modal-content">
+        <h1 class="modal-title">Concessionaire Details</h1>
+        <div class="form-modal-container" *ngFor="let upT of upTransView">
+            <label>Name: </label>
+            {{ upT.name}}
+            <br>
+            <label>Location:</label>
+            {{ upT.location}}
+            <br>
+            <label>Phone Number:</label>
+            {{ upT.phoneNo }}
+            <br>
+            <label>Email: </label>
+            {{ upT.email }}
+            <br>
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="document.getElementById('id02').style.display='none'" class="btn-cancel">Close</button>
+        </div>
+    </div> 
+</div>
+<!-- end modal2 -->
+<div id="id03" class="update-user-modal">
+    <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
+    <form class="modal-content" (submit)="addTransaction()" #updateTransactionForm="ngForm">
+        <h1 class="modal-title">Update Transaction</h1>
+        <div class="form-modal-container">
+            <label class="modal-label" for="preDate">Previous_Date</label>
+            <span class="inp">
+                <input id="modal-input" type="text" placeholder="" name="previousDate" required #pDate="ngModel" [(ngModel)]="previousDate1" [class.invalid]="pDate.invalid && pDate.touched" value="{{ upTrans.previous_date | date: 'shortDate' }}">
+                <span *ngIf="pDate.invalid && pDate.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+
+            <label class="modal-label" for="preRecord">Previous_Record</label>
+            <span class="inp">
+                <input id="modal-input" type="Number" placeholder="" name="previousRecord" required #pRecord="ngModel" [(ngModel)]="previousRecord1" [class.invalid]="pRecord.invalid && pRecord.touched" value="{{ upTrans.previous_record}}">
+                <span *ngIf="pRecord.invalid && pRecord.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+
+            <label class="modal-label" for="curDate">Current_Date</label>
+            <span class="inp">
+                <input id="modal-input" type="text" placeholder="" name="currentDate" required #cDate="ngModel" [(ngModel)]="currentDate1" [class.invalid]="cDate.invalid && cDate.touched" value="{{ upTrans.current_date | date: 'shortDate' }}">
+                <span *ngIf="cDate.invalid && cDate.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+
+            <label class="modal-label" for="curRecord">Current_Record</label>
+            <span class="inp">
+                <input id="modal-input" type="Number" placeholder="" name="currentRecord" required #cRecord="ngModel" [(ngModel)]="currentRecord1" [class.invalid]="cRecord.invalid && cRecord.touched" value="{{ upTrans.current_record}}">
+                <span *ngIf="cRecord.invalid && cRecord.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+
+            <label class="modal-label" for="con">Consumption</label>
+            <span class="inp">
+                <input id="modal-input" type="Number" placeholder="" name="consumpt" required #cons="ngModel" [(ngModel)]="consumpt1" [class.invalid]="cons.invalid && cons.touched" value="{{ upTrans.consumption}}">
+                <span *ngIf="cons.invalid && cons.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+
+            <label class="modal-label" for="duepayment">Due Payment Date</label>
+            <span class="inp">
+                <input id="modal-input" type="text" placeholder="" name="duepaymentDate" required #due="ngModel" [(ngModel)]="duepaymentDate1" [class.invalid]="due.invalid && due.touched" value="{{ upTrans.due_payment_date | date:'shortDate' }}">
+                <span *ngIf="due.invalid && due.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+
+            <label class="modal-label" for="curAmount">Current Amount Due</label>
+            <span class="inp">
+                <input id="modal-input" type="Number" placeholder="" name="caDue" required #cAmount="ngModel" [(ngModel)]="caDue1" [class.invalid]="cAmount.invalid && cAmount.touched" value="{{ upTrans.current_amount_due}}">
+                <span *ngIf="cAmount.invalid && cAmount.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+
+            <label class="modal-label" for="unmonth">Unpaid Month</label>
+            <span class="inp">
+                <input id="modal-input" type="Number" placeholder="" name="unpaidMonth" required #umonth="ngModel" [(ngModel)]="unpaidMonth1" [class.invalid]="umonth.invalid && umonth.touched" value="{{ upTrans.unpaid_month }}">
+                <span *ngIf="umonth.invalid && umonth.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="document.getElementById('id03').style.display='none'" class="btn-cancel">Cancel</button>
+            <input type="button" onclick="document.getElementById('id03').style.display='none'" class="btn-save-update" [disabled]="updateTransactionForm.invalid" value="Save Chages" (click) = "updateTransaction(upTrans._id)">
+        </div>
+    </form> 
+</div>
+<!-- end modal2 -->
+<!-- END MODALS -->
+<script>
+    var modal1 = document.getElementById('id02');
+    var modal2 = document.getElementById('id03');
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal || event.target == modal2 || event.target == modal3) {
+        modal.style.display = "none";
+        }
+    }
+</script>

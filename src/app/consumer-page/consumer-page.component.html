@@ -1,0 +1,265 @@
+<html>
+    <header class="user-header">
+        <img class="logo" src="assets/image/Screenshot (316).png" alt="logo" height="60px">
+        <span class="logo-text">Water Billing System</span>
+        <nav class="nav">
+            <ul class="nav_links">
+                <li><a routerLink="/transaction" routerLinkActive="linkActive">Transaction</a></li>
+                <li><a routerLink="/consumer" routerLinkActive="linkActive">Concessionaire</a></li>
+                <li><a routerLink="/user" routerLinkActive="linkActive">User Accounts</a></li>
+            </ul>
+        </nav>
+        <a routerLink="/login" routerLinkActive="linkActive">
+            <span class="cta"></span>
+            <button class="signout"><span>Sign Out </span></button>
+        </a>
+    </header>
+    <body class="container">
+        <div class="index-wrapper">
+            <div class="input-wrapper">
+                <form class="userForm" (submit)="addConsumer()" #concessionaireForm="ngForm">
+                    <div class="form-container">
+                        <label class="label">Name</label>
+                        <span class="inp">
+                            <input class="input" type="text" placeholder="ex: Juan Dela Cruz" name="consumer_Name" required #CName="ngModel" [(ngModel)]="consumer_Name" [class.invalid]="CName.invalid && CName.touched" pattern="^[A-Za-z. ]{2,}$">
+                            <span class="text-danger" *ngIf="CName.errors?.pattern"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+                            <span class="text-danger" *ngIf="!CName.value || CName.pristine">*</span>
+                        </span>
+                        <div class="help-block" *ngIf="CName.errors?.pattern">not a valid format</div>
+    
+                        <label class="label">Location</label>
+                        <span class="inp">
+                            <input class="input" type="text" placeholder="#1, North Street, Chennai - 11" name="consumer_Location" required #CLocation="ngModel" [(ngModel)]="consumer_Location" [class.invalid]="CLocation.invalid && CLocation.touched" pattern="">
+                            <span *ngIf="CLocation.errors?.pattern" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+                            <span *ngIf="!CLocation.value || CLocation.pristine" class="text-danger">*</span>
+                        </span>
+                        <div class="help-block" *ngIf="CLocation.errors?.pattern">not a valid format</div>
+    
+                        <label class="label">Phone Number</label>
+                        <span class="inp">
+                            <input class="input" type="text" placeholder="(0975) xxx xxxx" name="phone_Number" required #phoneNum="ngModel" [(ngModel)]="phone_Number" [class.invalid]="phoneNum.invalid && phoneNum.touched" pattern="^((\\+09-?)|0)?[0-9]{10}$">
+                            <span *ngIf="phoneNum.errors?.pattern" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+                            <span *ngIf="!phoneNum.value || phoneNum.pristine" class="text-danger">*</span>
+                        </span>
+                        <div class="help-block" *ngIf="phoneNum.errors?.pattern">not a valid format</div>
+
+                        <label class="label">Email</label>
+                        <span class="inp">
+                            <input class="input" type="text" placeholder="name@example.com" name="consumer_Email" required #CMail="ngModel" [(ngModel)]="consumer_Email" [class.invalid]="CMail.invalid && CMail.touched" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                            <span *ngIf="CMail.errors?.pattern" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+                            <span *ngIf="!CMail.value || CMail.pristine" class="text-danger">*</span>
+                        </span>
+                        <div class="help-block" *ngIf="CMail.errors?.pattern">not a valid format</div>
+                    </div>
+                    <div class="form-footer">
+                        <input type="submit" class="btn btn-new-acc" [disabled]="concessionaireForm.invalid" value="Save">
+                    </div>
+                </form>    
+            </div> 
+            <!-- END Input content -->
+    
+            <div class="index-container">
+                <input type="text" id="searchInput" onkeyup="myFunction()" placeholder="Search for a name..." title="Type a name">
+                <table id="myTable">
+                    <tr>
+                        <th class="th-name">Name</th>
+                        <th class="th-location">Location</th>
+                        <th class="th-phone">PhoneNumber</th>
+                        <th class="th-email">Email</th>
+                        <th class="th-act">Action</th>
+                    </tr>
+                    <tr *ngFor="let con of consumers">
+                        <td class="td-name">{{con.name}}</td>
+                        <td class="td-location">{{con.location}}</td>
+                        <td class="td-phone">{{con.phoneNo}}</td>
+                        <td class="td-email">{{con.email}}</td>
+                        <td class="td-act">
+                            <button class="btn-action"  (click)="getId(con._id)" onclick="document.getElementById('id01').style.display='block'"><img src="assets/image/icons8-add-new-30 (1).png" alt="new-icon"></button>
+                            <button class="btn-action"  (click)="getView(con._id)" onclick="document.getElementById('id02').style.display='block'"><img src="assets/image/icons8-view-more-30.png" alt="new-icon"></button>
+                            <button class="btn-action" (click)="getData(con._id)" onclick="document.getElementById('id03').style.display='block'"><img src="assets/image/icons8-edit-30.png" alt="edit-icon"></button>
+                            <button class="btn-action" (click)="deleteConsumer(con._id)"><img src="assets/image/icons8-trash-30.png" alt="delete-icon"></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
+
+<!-- MODAL -->
+<div id="id01" class="update-user-modal">
+    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+    <form class="modal-content" (submit)="addTransaction()" #addTransactionForm="ngForm">
+        <h1 class="modal-title">{{ upId.name }}</h1>
+        <div class="form-modal-container">
+            <!-- add inputs -->
+            <input type="text" id="modal-input" name="consId" #conId1="ngModel" [(ngModel)]="consId" value="{{ upId._id }}">
+
+            <label class="modal-label">Previous_Date</label>
+            <span class="inp">
+                <input id="modal-input" type="Date" placeholder="" name="previousDate" required #pDate="ngModel" [(ngModel)]="previousDate" [class.invalid]="pDate.invalid && pDate.touched">
+                <span *ngIf="pDate.invalid && pDate.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div class="help-block" *ngIf="pDate.errors?.pattern">Name is not a valid format</div>
+
+            <label class="modal-label">Previous_Record</label>
+            <span class="inp">
+                <input id="modal-input" type="text" placeholder="" name="previousRecord" required #pRecord="ngModel" [(ngModel)]="previousRecord" [class.invalid]="pRecord.invalid && pRecord.touched" pattern="^[0-9]{4,}$">
+                <span *ngIf="pRecord.invalid && pRecord.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div class="help-block" *ngIf="pRecord.errors?.pattern">not a valid format</div>
+
+            <label class="modal-label">Current_Date</label>
+            <span class="inp">
+                <input id="modal-input" type="Date" placeholder="" name="currentDate" required #cDate="ngModel" [(ngModel)]="currentDate" [class.invalid]="cDate.invalid && cDate.touched">
+                <span *ngIf="cDate.invalid && cDate.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div class="help-block" *ngIf="cDate.errors?.pattern">not a valid format</div>
+
+            <label class="modal-label" for="curRecord">Current_Record</label>
+            <span class="inp">
+                <input id="modal-input" type="Number" placeholder="" name="currentRecord" required #cRecord="ngModel" [(ngModel)]="currentRecord" [class.invalid]="cRecord.invalid && cRecord.touched">
+                <span *ngIf="cRecord.invalid && cRecord.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div class="help-block" *ngIf="cRecord.errors?.pattern">not a valid format</div>
+
+            <label class="modal-label" for="con">Consumption</label>
+            <span class="inp">
+                <input id="modal-input" type="Number" placeholder="" name="consumpt" required #cons="ngModel" [(ngModel)]="consumpt" [class.invalid]="cons.invalid && cons.touched">
+                <span *ngIf="cons.invalid && cons.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div class="help-block" *ngIf="cons.errors?.pattern">not a valid format</div>
+
+            <label class="modal-label" for="duepayment">Due Payment Date</label>
+            <span class="inp">
+                <input id="modal-input" type="date" placeholder="" name="duepaymentDate" required #due="ngModel" [(ngModel)]="duepaymentDate" [class.invalid]="due.invalid && due.touched">
+                <span *ngIf="due.invalid && due.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div class="help-block" *ngIf="due.errors?.pattern">not a valid format</div>
+
+            <label class="modal-label" for="curAmount">Current Amount Due</label>
+            <span class="inp">
+                <input id="modal-input" type="Number" placeholder="" name="caDue" required #cAmount="ngModel" [(ngModel)]="caDue" [class.invalid]="cAmount.invalid && cAmount.touched">
+                <span *ngIf="cAmount.invalid && cAmount.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div class="help-block" *ngIf="cAmount.errors?.pattern">not a valid format</div>
+
+            <label class="modal-label" for="unmonth">Unpaid Month</label>
+            <span class="inp">
+                <input id="modal-input" type="Number" placeholder="" name="unpaidMonth" required #umonth="ngModel" [(ngModel)]="unpaidMonth" [class.invalid]="umonth.invalid && umonth.touched">
+                <span *ngIf="umonth.invalid && umonth.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <!-- <div class="help-block" *ngIf="umonth.errors?.pattern">not a valid format</div> -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="btn-cancel">Cancel</button>
+            <input type="submit" class="btn-save-update" onclick="document.getElementById('id01').style.display='none'" >
+        </div>
+    </form> 
+</div>
+<!-- end modal 1 -->
+<div id="id02" class="update-user-modal">
+    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+    <div class="modal-content" >
+        <h1 class="modal-title">User Account Details</h1>
+        <div class="form-modal-container" >
+            <table id="myTable" *ngFor="let upV of upView">
+                <tr class="header">
+                    <th>Transaction ID:</th>
+                    <td>{{ upV._id }}</td>
+                </tr>
+                <tr class="header">
+                    <th>Previous Date:</th>
+                    <td>{{ upV.previous_date | date:'shortDate'}}</td>
+                </tr>
+                <tr class="header">
+                    <th>Previous Record:</th>
+                    <td>{{ upV.previous_record }}</td>
+                </tr>
+                <tr class="header">
+                    <th>Current Date:</th>
+                    <td>{{ upV.current_date | date:'shortDate' }}</td>
+                </tr>
+                <tr class="header">
+                    <th>Current Record: </th>
+                    <td>{{ upV.current_record }}</td>
+                </tr>
+                <tr class="header">
+                    <th>Consumption: </th>
+                    <td>{{ upV.consumption }}</td>
+                </tr>
+                <tr class="header">
+                    <th>Due Payment Date: </th>
+                    <td>{{ upV.due_payment_date | date:'shortDate' }}</td>
+                </tr>
+                <tr class="header">
+                    <th>Current Amount Due: </th>
+                    <td>{{ upV.current_amount_due | currency:'PHP'}}</td>
+                </tr>
+                <tr class="header">
+                    <th>Unpaid Month: </th>
+                    <td>{{ upV.unpaid_month }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="document.getElementById('id02').style.display='none'" class="btn-cancel">Close</button>
+        </div>
+    </div> 
+</div>
+    <!-- end modal2 -->
+<div id="id03" class="update-user-modal">
+    <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
+    <form class="modal-content" #updateConsumerForm="ngForm">
+        <h1 class="modal-title">{{ upId.name }}</h1>
+        <div class="form-modal-container">
+            <!-- message warning -->
+            <div class="help-block" *ngIf="CName1.errors?.pattern">Name is not a valid format</div>
+            <div class="help-block" *ngIf="conLocation.errors?.pattern">Not a valid format</div>
+            <div class="help-block" *ngIf="phone1.errors?.pattern">Phone Nuber should have 11 digit only</div>
+            <div class="help-block" *ngIf="email1.errors?.pattern">Not a valid email format</div>
+            <!-- end message warning -->
+            <!-- update inputs -->
+            <label class="modal-label">Name</label>
+            <span class="inp">
+                <input id="modal-input" type="text" placeholder="ex: Juan Dela Cruz" name="consumer_Name1" required #CName1="ngModel" [(ngModel)]="consumer_Name1" [class.invalid]="CName1.invalid && CName1.touched" value="{{ upConsumers.name }}" pattern="^[A-Za-z. ]{2,}$">
+                <span *ngIf="CName1.value==''" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+            <label class="modal-label">Location</label>
+            <span class="inp">
+                <input id="modal-input" type="text" name="consumer_Location1" placeholder="#1, North Street, Chennai - 11 " required #conLocation="ngModel" [(ngModel)]="consumer_Location1" [class.invalid]="conLocation.invalid && conLocation.touched" value="{{ upConsumers.location }}" pattern="^[#.0-9a-zA-Z\s,-]+$">
+                <span *ngIf="conLocation.value==''" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+            <label class="modal-label">Phone Number</label>
+            <span class="inp">
+                <input id="modal-input" type="text" name="phone_Number1" placeholder="(0975) xxx xxxx" required #phone1="ngModel" [(ngModel)]="phone_Number1" [class.invalid]="phone1.invalid && phone1.touched" value="{{ upConsumers.phoneNo }}" pattern="^((\\+09-?)|0)?[0-9]{10}$">
+                <span *ngIf="phone1.value==''" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+            <div></div>
+            <label class="modal-label">Email</label>
+            <span class="inp">
+                <input id="modal-input" type="text" placeholder="name@example.com" name="consumer_Email1" required #email1="ngModel" [(ngModel)]="consumer_Email1" [class.invalid]="email1.invalid && email1.touched" value="{{ upConsumers.email }}" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                <span *ngIf="email1.value==''" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></span>
+            </span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" onclick="document.getElementById('id03').style.display='none'" class="btn-cancel">Cancel</button>
+            <input type="button" onclick="document.getElementById('id03').style.display='none'" class="btn-save-update" [disabled]="updateConsumerForm.invalid" value="Save Chages" (click)="updateConsumer(upConsumers._id)">
+        </div>
+    </form> 
+</div>
+<!-- end modal2 -->
+<!-- END MODALS -->
+<script>
+    var modal1 = document.getElementById('id01');
+    var modal2 = document.getElementById('id02');
+    var moda3 = document.getElementById('id03');
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal || event.target == modal2 || event.target == modal3) {
+        modal.style.display = "none";
+        }
+    }
+</script>

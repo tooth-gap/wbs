@@ -1,0 +1,64 @@
+<html>
+    <header class="header">
+        <img class="logo" src="assets/image/Screenshot (316).png" alt="logo" height="60px">
+        <span class="logo-text">Water Billing System</span>
+        <nav class="nav">
+            <!-- <span>Don't have an account?</span> -->
+        </nav>
+        <!-- <div class="sign-in" onclick="openModal()">Sign in</div> -->
+    </header>
+    
+    <body class="log-body">
+        <div class="parent flex-center ">
+            <div class="box flex-center moving-gradient">
+                <!--  -->
+                <form class="logForm" (submit)="doLogin(logName_,logPassword_)" #loginForm="ngForm">
+                    <div class="icon-container">
+                        <div class="user-icon"></div>
+                    </div>
+                    <div class="form-container">
+                        <label class="label-log" for="logName">Username</label>
+                        <input id="input-log" type="text" placeholder="Username" name="logName" required #logName="ngModel" [(ngModel)]="logName_" [class.invalid]="logName.invalid && logName.touched">
+                        <div *ngIf="logName.invalid && logName.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></div>
+
+                        <label class="label-log" for="logPassword">Password</label>
+                        <input id="input-log" type="password" placeholder="Password" name="logPassword" required #logPassword="ngModel" [(ngModel)]="logPassword_" [class.invalid]="logPassword.invalid && logPassword.touched">
+                        <div *ngIf="logPassword.invalid && logPassword.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></div>
+                        <input type="submit" [disabled]="loginForm.form.invalid" value="Login" class="btn btn-log">
+                        <!--  -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+    <img src="/assets/image/marek-okon-tWWCqIMiUmg.jpg" alt="coral-reef" width="100%" height="660px">
+</html>
+
+<!-- content modal -->
+<div id="sign-up-modal">
+    <h6 class="modal-title">Sign UP</h6>
+    <div class="modal-close" onclick="closeModal()">+</div>
+    <div class="modal-content">
+        <div class="modal-body">
+            <form class="sign-up-form" (submit)="doSignUp()"  #signForm="ngForm">
+                <div class="form-container">
+                    <label class="label-log" for="signName">Name</label>
+                    <input id="input-log" type="text" placeholder="ex: Juan Dela Cruz" name="signName" required #signName="ngModel" [(ngModel)]="signName_" [class.invalid]="signName.invalid && signName.touched">
+                    <div *ngIf="signName.invalid && signName.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></div>
+
+                    <label class="label-log" for="signUname">Username</label>
+                    <input id="input-log" type="text" placeholder="Username" name="signUname" required #signUname="ngModel" [(ngModel)]="signUname_" [class.invalid]="signUname.invalid && signUname.touched">
+                    <div *ngIf="signUname.invalid && signUname.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></div>
+
+                    <label class="label-log" for="signPassword">Password</label>
+                    <input id="input-log" type="password" placeholder="Password" name="signPassword" required #signPassword="ngModel" [(ngModel)]="signPassword_" [class.invalid]="signPassword.invalid && signPassword.touched">
+                    <div *ngIf="signPassword.invalid && signPassword.touched" class="text-danger"><img src="assets/image/icons8-error-30.png" alt="warning"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-sign-up" [disabled]="signForm.form.invalid">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
