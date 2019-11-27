@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 })
 export class TransactionService {
 
-  // public url:string = "http://localhost:80";
-  public url:string = "https://wbs-itsd.herokuapp.com/";
+  public url:string = "http://localhost:80";
+  // public url:string = "https://wbs-itsd.herokuapp.com/";
   public headers = new HttpHeaders().set('Content-Type','application/json')
 
   constructor(public http:HttpClient) { }

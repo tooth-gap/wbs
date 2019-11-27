@@ -204,14 +204,14 @@ app.get('/transaction/:id', (req, res) => {
 });
 
 app.get('/transaction/view/:id', (req, res) => {
-    Transaction.findOne({_id:req.params.id},(err, data) => {
+    Consumer.find({_id:req.params.id},(err, data) => {
     if(err) res.json({"msg":"Invalid Request"});
         res.json(data);
     });
 });
 
 app.get('/transaction/consumer/:id', (req, res) => {
-    Transaction.findOne({consumerId:req.params.id},(err, data) => {
+    Transaction.find({consumerId:req.params.id},(err, data) => {
     if(err) res.json({"msg":"Invalid Request"});
         res.json(data);
     });
